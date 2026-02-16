@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 const plugLink = 'https://xfloor.ai/xforge'
 
 const faqItems = [
@@ -89,6 +91,8 @@ function SvgIcon({ type }) {
 }
 
 function App() {
+  const [openFaq, setOpenFaq] = useState(null)
+
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-slate-950 text-slate-200">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -329,13 +333,24 @@ function App() {
 
         <section className="space-y-6">
           <h2 className={sectionTitle}>FAQ</h2>
-          <div className="grid gap-3">
-            {faqItems.map(([q, a]) => (
-              <GlowCard key={q}>
-                <h3 className="text-sm font-semibold text-white sm:text-base">{q}</h3>
-                <p className="mt-1 text-sm text-slate-300">{a}</p>
-              </GlowCard>
-            ))}
+          <div className="grid gap-4 md:grid-cols-2">
+            {faqItems.map(([q, a], index) => {
+              const isOpen = openFaq === index
+              return (
+                <div key={q} className="rounded-xl border border-white/10 bg-slate-900/40 px-4">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between gap-3 py-4 text-left"
+                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                    aria-expanded={isOpen}
+                  >
+                    <span className="text-sm font-semibold text-white sm:text-base">{q}</span>
+                    <span className="text-2xl leading-none text-cyan-300 transition">{isOpen ? '−' : '+'}</span>
+                  </button>
+                  {isOpen && <p className="pb-4 text-sm text-slate-300">{a}</p>}
+                </div>
+              )
+            })}
           </div>
         </section>
       </main>
